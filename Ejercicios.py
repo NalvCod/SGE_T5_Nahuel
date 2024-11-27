@@ -168,3 +168,45 @@ def ej10(num):
     tabla = ""
     for i in range (1, 11):
         tabla += num+"*"+i+"="+num*i+"\n"
+
+
+def Pipo():
+    while(True):
+        res = int(input("MENÚ PRINCIPAL:"
+              "\n\t[1] Aprender las tablas"
+              "\n\t[2] Practicar las tablas"
+              "\n\t[3] Salir\n > "))
+
+        if res == 1:
+            aprenderTablas()
+        elif res == 2:
+            practicarTablas()
+        elif res == 3:
+            break
+        else:
+            print("Elige [1] [2] [3]")
+
+def practicarTablas():
+    res = input("Elige las tablas para practicar: ")
+    tablas = res.split("-")
+
+    numIntentos = int(input("Elige el número de intentos: "))
+    fallos = 0
+    aciertos = 0
+
+    for it in range(0, numIntentos):
+        tabla = int(random.choice(tablas))
+        multiplicador = random.randint(0,10)
+
+        intento = int(input(f"¿{tabla} x {multiplicador}?"))
+        solucion = int(tabla * multiplicador)
+
+        if intento != solucion:
+            print(f"[ERROR] {tabla} x {multiplicador} es {solucion}, no {intento}\n")
+            fallos += 1
+        else:
+            print("[CORRECTO]\n")
+            aciertos += 1
+
+
+    print(f"Has tenido {aciertos} aciertos y {fallos} fallos. Eso te da una tasa de acierto del {numIntentos * 100 / aciertos}%\n")
