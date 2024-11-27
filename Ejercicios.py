@@ -7,9 +7,8 @@ def ej1(cadena, letra):
     for caracter in cadena:
         if caracter == letra:
             contador= contador+1
-
-    print(letra)
-
+    print(contador)
+print("EJERCICIO 1")
 ej1("palapa", 'p')
 
 
@@ -25,6 +24,10 @@ def ej2(cadena):
     else:
         return False
 
+print("EJERCICIO 2")
+print(ej2("ana"))
+print(ej2("pipo"))
+
 
 '''
 Ejercicio 3. Crea una función que dada un cadena devuelva una lista con las
@@ -35,16 +38,17 @@ siguientes cadenas:
 • Una con la letras pares
 • Una con la cadena alrevés (sin usar .reversed())
 '''
-def ej3(cadena):
-    devolver = list
+def ej3(cadena) -> list:
+    devolver = []
     cadena2 = ''
     contador = 0
 
-    for i in range(0,4):
+    for i in range(0,5):
         cadena2 += cadena[i]
 
     devolver.append(cadena2)
     cadena2 = ''
+
     for letra in cadena[::-1]:
         if (contador < 5):
             cadena2 += letra
@@ -52,18 +56,25 @@ def ej3(cadena):
 
     devolver.append(cadena2)
     cadena2 = ''
-    for letra in cadena[1:cadena.size:2]:
-        cadena2 += letra
-    devolver.append(cadena2)
-    cadena2 = ''
-    for letra in cadena[0:cadena.size:2]:
-        cadena2 += letra
 
-    cadena2 = ''
-    for letra in cadena[::-1]:
-            cadena2 += letra
-            contador = contador+1
+    for letra in cadena[1::2]:
+        cadena2 += letra
     devolver.append(cadena2)
+    cadena2 = ''
+
+    for letra in cadena[::2]:
+        cadena2 += letra
+    devolver.append(cadena2)
+    cadena2 = ''
+
+    for letra in cadena[::-1]:
+        cadena2 += letra
+        contador = contador+1
+    devolver.append(cadena2)
+
+    return devolver
+
+print(ej3("manatí"))
 
 '''
 Ejercicio 4. Crea una función que dada una cadena determine si es un palíndromo o
@@ -98,41 +109,46 @@ Ejercicio 6. Crea una función que dada una cadena de texto encuentre la palabra
 larga y la más corta de dicha cadena 
 '''
 def ej6(cadena):
-    cadena.split(' ')
-    larga = 0
-    aux = 0
-    corta = 0
-    palaralarg = ""
-    palabracort = ""
+    palabras = cadena.split(' ')
 
-    for palabra in cadena:
-        for letra in palabra:
-            larga += larga+1
-            corta += corta+1
-        if larga < corta:
-            palabracort = palabra
-        else:
-            palabralarg = palabra
+    palabracorta = palabras[0]
+    palabralarga = palabras[0]
+
+    for palabra in palabras:
+        if len(palabra) < len(palabracorta):
+            palabracorta = palabra
+        if len(palabra) > len(palabralarga):
+            palabralarga = palabra
+
+    return palabracorta, palabralarga
+
+cadena = "Estoy bastante desquiciado"
+corta, larga = ej6(cadena)
+print(f"La palabra más corta es: {corta}")
+print(f"La palabra más larga es: {larga}")
 
 '''
 Ejercicio 7. Crea una función que cuenta cuantas veces aparece una subcadena en
 un texto
 '''
 def ej7(cadena, subcadena):
-    longisub = subcadena.size
-    contador = 0
+    longisub = len(subcadena)
     apariciones = 0
 
-    for i in range (0,cadena.size):
-        if cadena[i] == subcadena[0]:
-            for j in range(0,longisub):
-                if subcadena[j] == cadena[i+j]:
-                    contador = contador+1
+    for i in range(len(cadena) - longisub + 1):
+        contador = 0
+        for j in range(longisub):
+            if subcadena[j] == cadena[i + j]:
+                contador += 1
+        if contador == longisub:
+            apariciones += 1
 
-            if contador == longisub:
-                apariciones += apariciones+1
+    return apariciones  # Devolvemos el número de apariciones
 
-print("Numero de apariciones: {apariciones}")
+cadena = "espa parapa tapa"
+subcadena = "pa"
+resultado = ej7(cadena, subcadena)
+print(f"Numero de apariciones: {resultado}")
 
 
 '''
@@ -142,23 +158,47 @@ del texto.
 '''
 def ej8(cadena, subcadena):
     palabras = cadena.split(" ")
-    aux = ""
     contador = 0
+    indices = []
 
     for palabra in palabras:
-        aux = palabra.replace(subcadena, "^")
-        if (palabra[0] == '^' and palabra[palabra.size] == '^'):
-            contador = contador+1
+        inicio = 0
+        while inicio < len(palabra):
+            inicio = palabra.find(subcadena, inicio)
+            if inicio == -1:
+                break
+            final = inicio + len(subcadena) - 1
+            indices.append((inicio, final))
+            contador += 1
+            inicio += 1
 
-    print(contador)
+    print(f"Numero de apariciones: {contador}")
+    for inicio, final in indices:
+        print(f"Subcadena encontrada desde el índice {inicio} hasta el índice {final}")
 
-
+# Ejemplo de uso
 ej8("holaho perro hopeho", "ho")
+
 '''
 Ejercicio 9. Crea una función que encuentre todas las palabras de un texto que
 empiezan y acaban por una misma subcadena dada
 '''
 
+
+def ej9(cadena, subcadena):
+    palabras = cadena.split()
+    palabras_encontradas = []
+
+    for palabra in palabras:
+        if palabra.startswith(subcadena) and palabra.endswith(subcadena):
+            palabras_encontradas.append(palabra)
+
+    print(f"Palabras que empiezan y terminan con '{subcadena}':")
+    for palabra in palabras_encontradas:
+        print(palabra)
+
+
+ej9("hola hola123 hoho mundo hohoho", "ho")
 
 '''
 Ejercicio 10. Crea una función que reciba como parámetro un número entero y que
@@ -169,22 +209,13 @@ def ej10(num):
     for i in range (1, 11):
         tabla += num+"*"+i+"="+num*i+"\n"
 
+def aprenderTablas():
+    res = int(input("Que tablas quieres aprender?\n > "))
 
-def Pipo():
-    while(True):
-        res = int(input("MENÚ PRINCIPAL:"
-              "\n\t[1] Aprender las tablas"
-              "\n\t[2] Practicar las tablas"
-              "\n\t[3] Salir\n > "))
+    for it in range(1,11):
+        print(f"{res} x {it} = {(res * it)}")
 
-        if res == 1:
-            aprenderTablas()
-        elif res == 2:
-            practicarTablas()
-        elif res == 3:
-            break
-        else:
-            print("Elige [1] [2] [3]")
+    print("\n")
 
 def practicarTablas():
     res = input("Elige las tablas para practicar: ")
@@ -210,3 +241,82 @@ def practicarTablas():
 
 
     print(f"Has tenido {aciertos} aciertos y {fallos} fallos. Eso te da una tasa de acierto del {numIntentos * 100 / aciertos}%\n")
+
+
+def pipo():
+    while(True):
+        res = int(input("MENÚ PRINCIPAL:"
+              "\n\t[1] Aprender las tablas"
+              "\n\t[2] Practicar las tablas"
+              "\n\t[3] Salir\n > "))
+
+        if res == 1:
+            aprenderTablas()
+        elif res == 2:
+            practicarTablas()
+        elif res == 3:
+            break
+        else:
+            print("Elige [1] [2] [3]")
+
+
+def ahorcado():
+    print("EL AHORCADO")
+    vidas = 3
+    solucion = ""
+
+    dificultad = int(input("Introduce la dificultad:\n\t[1] Normal\n\t[2] Intermedio\n\t[3] Cerebro Galaxia\n > "))
+
+    if dificultad == 1:
+        solucion = "pato"
+    elif dificultad == 2:
+        solucion = "patato"
+    elif dificultad == 3:
+        solucion = "palpitacion"
+
+    letrasAcertadas = []
+    for letra in solucion:
+        letrasAcertadas.append(False)
+
+
+    while vidas > 0:
+        mostrar_palabra = ""
+        for i in range(len(solucion)):
+            if letrasAcertadas[i]:
+                mostrar_palabra += solucion[i] + " "
+            else:
+                mostrar_palabra += "_ "
+
+        print(f"\n{mostrar_palabra.strip()}")
+
+        res = input("\nElige una letra: ").lower()
+
+        if len(res) != 1 or not res.isalpha():
+            print("Elige un valor valido")
+            continue
+
+        # Verificar si la letra está en la palabra
+        letra_incluida = False
+        for i in range(len(solucion)):
+            if solucion[i] == res:
+                letrasAcertadas[i] = True
+                letra_incluida = True
+
+        if letra_incluida:
+            print("[CORRECTO]")
+        else:
+            vidas -= 1
+            print(f"[INCORRECTO] Tienes [{vidas}] oportunidades más")
+
+        if all(letrasAcertadas):
+            print("\nHAS GANADO")
+            break
+
+    if vidas == 0:
+        print(f"\nHAS PERDIDO. La palabra era: {solucion}")
+
+
+
+
+pipo()
+ahorcado()
